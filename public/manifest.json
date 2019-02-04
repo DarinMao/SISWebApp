@@ -1,0 +1,25 @@
+{
+  "short_name": "StudentVUE",
+  "name": "FCPS StudentVUE",
+  "icons": [
+    {
+      "src": "/img/icons/icon-64.png",
+      "type": "image/png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/img/icons/icon-128.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "/img/icons/icon-256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "display": "fullscreen",
+  "theme_color": "#5983e8"
+}
