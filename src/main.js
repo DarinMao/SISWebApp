@@ -8,10 +8,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBell, faUser, faCalendarAlt, faClipboardCheck, faList, faBook, faMedkit, faCheck, faTimes, faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon, FontAwesomeLayers } from "@fortawesome/vue-fontawesome";
-import './registerServiceWorker'
 
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = true;
 Vue.use(Vuex);
 
 library.add(faBell);
