@@ -108,10 +108,13 @@
     width: 40%;
   }
 
-  .immunization-doses:not(.show) {
+  .immunization-doses {
     padding: 0 1rem;
-    display: flex;
     flex-wrap: wrap;
+  }
+
+  .immunization-doses.show, .immunization-doses.collapsing {
+    display: flex;
   }
 
   .immunization-doses > .immunization-dose {

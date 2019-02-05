@@ -7,7 +7,12 @@
 
 <script>
   export default {
-    name: 'app'
+    name: "app",
+    watch: {
+      $route() {
+        this.$store.commit("page/setError", "");
+      }
+    }
   }
 </script>
 
