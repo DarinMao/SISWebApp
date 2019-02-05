@@ -35,7 +35,7 @@
             <col span="1" class="col-markname">
             <tr v-for="mark in course.marks">
               <th scope="row">{{ mark.name }}</th>
-              <td>{{ mark.calculatedScore }} ({{ mark.rawCalculatedScore }})</td>
+              <td>{{ mark.calculatedScore }} ({{ mark.rawCalculatedScore.toFixed(1) }})</td>
             </tr>
           </table>
         </div>
