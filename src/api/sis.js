@@ -19,7 +19,14 @@ const parseOpts = {
     "HealthConditionsListing",
     "HealthImmunizationListing",
     "ImmunizationDate",
-    "EventList"
+    "ReportPeriod",
+    "Course",
+    "Mark",
+    "Assignment",
+    "EventList",
+    "Absence",
+    "Period",
+    "PeriodTotal"
   ]
 };
 
@@ -117,7 +124,7 @@ StudentVUE.prototype.getDistrictEvents = async function() {
 }
 
 StudentVUE.prototype.getStudent = async function() {
-  const data = await this.request("StudentInfo", {ChildIntID: 0});
+  const data = await this.request("StudentInfo");
   const js = data.StudentInfo;
 
   const name = js.FormattedName._text;
@@ -183,7 +190,7 @@ StudentVUE.prototype.getStudent = async function() {
 }
 
 StudentVUE.prototype.getTermList = async function() {
-  const data = await this.request("StudentClassList", {ChildIntID: 0});
+  const data = await this.request("StudentClassList");
   const js = data.StudentClassSchedule;
 
   const termList = [];
@@ -216,7 +223,7 @@ StudentVUE.prototype.getTermList = async function() {
 }
 
 StudentVUE.prototype.getClassSchedule = async function(term) {
-  const params = {ChildIntID: 0};
+  const params = {};
   if (term != undefined) {
     params.TermIndex = term;
   }
@@ -265,7 +272,7 @@ StudentVUE.prototype.getGrades = async function(term=null) {
 */
 
 StudentVUE.prototype.getGrades = async function(term=null) {
-  const params = {ChildIntID: 0};
+  const params = {};
   if (term != null) {
     params.ReportPeriod = term;
   }
@@ -357,7 +364,7 @@ StudentVUE.prototype.getGrades = async function(term=null) {
 }
 
 StudentVUE.prototype.getHealthInfo = async function(healthModules={}) {
-  const params = {ChildIntID: 0};
+  const params = {};
   if (!healthModules.hasOwnProperty("healthVisits") || !healthModules.hasOwnProperty("healthConditions") || !healthModules.hasOwnProperty("healthImmunizations")) {
     healthModules = await this.getActiveModules();
   }
@@ -412,8 +419,14 @@ StudentVUE.prototype.getHealthInfo = async function(healthModules={}) {
 
 StudentVUE.prototype.getCalendar = async function(date=new Date()) {
   const dateString = (date instanceof Date)?`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`:date;
-  const data = await this.request("StudentCalendar", {ChildIntID: 0, RequestDate: dateString});
+  const data = await this.request("StudentCalendar", {RequestDate: dateString});
   const js = data.CalendarListing;
+
+  const calendarAttributes = js._attributes;
+  const schoolStart = new Date(calendarAttributes.SchoolBegDate);
+  const schoolEnd = new Date(calendarAttributes.SchoolEndDate);
+  const monthStart = new Date(calendarAttributes.MonthBegDate);
+  const monthEnd = new Date(calendarAttributes.MonthEndDate);
 
   const events = [];
   const eventListAttributes = js.EventLists.EventList;
@@ -428,5 +441,105 @@ StudentVUE.prototype.getCalendar = async function(date=new Date()) {
     }
   }
 
-  return events;
+  return {schoolStart, schoolEnd, monthStart, monthEnd, events};
+}
+
+StudentVUE.prototype.getAttendance = async function() {
+  const data = await this.request("Attendance");
+  const js = data.Attendance;
+
+  const attendanceAttributes = js._attributes;
+  const type = attendanceAttributes.Type;
+  const start = parseInt(attendanceAttributes.StartPeriod);
+  const end = parseInt(attendanceAttributes.EndPeriod);
+  const periods = parseInt(attendanceAttributes.PeriodCount);
+
+  const absences = [];
+  const absenceListAttributes = js.Absences.Absence;
+  if (absenceListAttributes != undefined) {
+    for (let i = 0; i < absenceListAttributes.length; i++) {
+      const absenceAttributes = absenceListAttributes[i]._attributes;
+      const date = new Date(absenceAttributes.AbsenceDate);
+      const reason = absenceAttributes.Reason;
+      const note = absenceAttributes.Note;
+
+      const periods = [];
+      const periodListAttributes = absenceListAttributes[i].Periods.Period;
+      if (periodListAttributes != undefined) {
+        for (let k = 0; k < periodListAttributes.length; k++) {
+          const periodAttributes = periodListAttributes[k]._attributes;
+          const period = parseInt(periodAttributes.Number);
+          const name = periodAttributes.Name;
+          const reason = periodAttributes.Reason;
+          const teacherName = periodAttributes.Staff;
+          const teacherEmail = periodAttributes.StaffEMail;
+          const teacher = {
+            name: teacherName,
+            email: teacherEmail
+          };
+          const school = periodAttributes.SchoolName;
+          periods.push({period, name, reason, teacher, school});
+        }
+      }
+
+      absences.push({date, reason, note, periods});
+    }
+  }
+
+  const excused = {};
+  const excusedListAttributes = js.TotalExcused.PeriodTotal;
+  if (excusedListAttributes != undefined) {
+    for (let i = 0; i < excusedListAttributes.length; i++) {
+      const excusedAttributes = excusedListAttributes[i]._attributes;
+      const period = parseInt(excusedAttributes.Number);
+      const total = parseInt(excusedAttributes.Total);
+      excused[period] = total;
+    }
+  }
+
+  const tardies = {};
+  const tardiesListAttributes = js.TotalTardies.PeriodTotal;
+  if (tardiesListAttributes != undefined) {
+    for (let i = 0; i < tardiesListAttributes.length; i++) {
+      const tardiesAttributes = tardiesListAttributes[i]._attributes;
+      const period = parseInt(tardiesAttributes.Number);
+      const total = parseInt(tardiesAttributes.Total);
+      tardies[period] = total;
+    }
+  }
+
+  const unexcused = {};
+  const unexcusedListAttributes = js.TotalUnexcused.PeriodTotal;
+  if (unexcusedListAttributes != undefined) {
+    for (let i = 0; i < unexcusedListAttributes.length; i++) {
+      const unexcusedAttributes = unexcusedListAttributes[i]._attributes;
+      const period = parseInt(unexcusedAttributes.Number);
+      const total = parseInt(unexcusedAttributes.Total);
+      unexcused[period] = total;
+    }
+  }
+
+  const activities = {};
+  const activitiesListAttributes = js.TotalActivities.PeriodTotal;
+  if (activitiesListAttributes != undefined) {
+    for (let i = 0; i < activitiesListAttributes.length; i++) {
+      const activitiesAttributes = activitiesListAttributes[i]._attributes;
+      const period = parseInt(activitiesAttributes.Number);
+      const total = parseInt(activitiesAttributes.Total);
+      activities[period] = total;
+    }
+  }
+
+  const unexcusedTardies = {};
+  const unexcusedTardiesListAttributes = js.TotalActivities.PeriodTotal;
+  if (unexcusedTardiesListAttributes != undefined) {
+    for (let i = 0; i < unexcusedTardiesListAttributes.length; i++) {
+      const unexcusedTardiesAttributes = unexcusedTardiesListAttributes[i]._attributes;
+      const period = parseInt(unexcusedTardiesAttributes.Number);
+      const total = parseInt(unexcusedTardiesAttributes.Total);
+      unexcusedTardies[period] = total;
+    }
+  }
+
+  return {absences, excused, tardies, unexcused, activities, unexcusedTardies};
 }

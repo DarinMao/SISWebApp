@@ -6,7 +6,9 @@ function initialState() {
     schedule: {},
     termList: [],
     health: {},
-    grades: {}
+    grades: {},
+    calendar: {},
+    attendance: {}
   }
 }
 
@@ -33,6 +35,12 @@ const getters = {
   },
   grades: state => {
     return state.grades;
+  },
+  calendar: state => {
+    return state.calendar;
+  },
+  attendance: state => {
+    return state.attendance;
   }
 }
 
@@ -49,7 +57,7 @@ const actions = {
         commit("setActiveModules", activeModules);
       })
       .catch(e => {
-        // idk what to do here, think of something later
+        commit("page/setError", e.message, { root: true });
       });
   },
   getDistrictEvents({rootState, commit}) {
@@ -58,7 +66,7 @@ const actions = {
         commit("setDistrictEvents", districtEvents);
       })
       .catch(e => {
-        // idk what to do here, think of something later
+        commit("page/setError", e.message, { root: true });
       });
   },
   getStudent({rootState, commit}) {
@@ -67,7 +75,7 @@ const actions = {
         commit("setStudent", student);
       })
       .catch(e => {
-        // idk what to do here, think of something later
+        commit("page/setError", e.message, { root: true });
       });
   },
   getSchedule({rootState, commit}, term) {
@@ -85,7 +93,7 @@ const actions = {
         commit("setTermList", termList);
       })
       .catch(e => {
-        // idk what to do here, think of something later
+        commit("page/setError", e.message, { root: true });
       });
   },
   getHealth({state, rootState, commit}) {
@@ -97,7 +105,7 @@ const actions = {
         commit("setHealth", health);
       })
       .catch(e => {
-
+        commit("page/setError", e.message, { root: true });
       });
   },
   getGrades({rootState, commit}, period) {
@@ -106,8 +114,26 @@ const actions = {
         commit("setGrades", grades);
       })
       .catch(e => {
-        
+        commit("page/setError", e.message, { root: true });
       });
+  },
+  getCalendar({rootState, commit}) {
+    return rootState.user.svue.getCalendar()
+      .then(calendar => {
+        commit("setCalendar", calendar);
+      })
+      .catch(e => {
+        commit("page/setError", e.message, { root: true });
+      })
+  },
+  getAttendance({rootState, commit}) {
+    return rootState.user.svue.getAttendance()
+      .then(attendance => {
+        commit("setAttendance", attendance);
+      })
+      .catch(e => {
+        commit("page/setError", e.message, { root: true });
+      })
   }
 }
 
@@ -138,6 +164,12 @@ const mutations = {
   },
   setGrades(state, grades) {
     state.grades = grades;
+  },
+  setCalendar(state, calendar) {
+    state.calendar = calendar;
+  },
+  setAttendance(state, attendance) {
+    state.attendance = attendance;
   }
 }
 

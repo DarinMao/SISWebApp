@@ -14,9 +14,7 @@
           <router-link class="dropdown-item" v-bind:key="term.index" v-for="term in termList" v-bind:class="{active: term.index == schedule.termIndex}" v-bind:to="'/schedule/' + term.index">{{ term.name }}</router-link>
         </div>
       </div>
-      <div class="alert alert-danger" role="alert" v-if="error">
-        {{ error }}
-      </div>
+      <ErrorAlert v-bind:error="error" />
       <div class="class-schedule" v-if="!error">
         <h4 class="border-bottom pb-2 mb-4">
           {{ schedule.termName }} Schedule
@@ -51,11 +49,13 @@
 
 <script>
   import Loader from "../components/Loader.vue";
+  import ErrorAlert from "../components/Error.vue";
 
   export default {
     name: "schedule",
     components: {
-      Loader
+      Loader,
+      ErrorAlert
     },
     created() {
       this.fetch();

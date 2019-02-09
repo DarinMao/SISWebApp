@@ -29,9 +29,6 @@
       }
     },
     methods: {
-      hi() {
-        alert("hi");
-      },
       checkLoggedIn() {
         if (!this.loggedIn) {
           this.$router.replace({ path: "/login", query: {next: this.$route.path}});

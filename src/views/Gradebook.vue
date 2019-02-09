@@ -14,9 +14,7 @@
           <router-link class="dropdown-item" v-bind:key="reportPeriod.index" v-for="reportPeriod in grades.reportPeriods" v-bind:class="{active: reportPeriod.name == grades.reportPeriod.name}" v-bind:to="'/gradebook/' + reportPeriod.index">{{ reportPeriod.name }}</router-link>
         </div>
       </div>
-      <div class="alert alert-danger" role="alert" v-if="error">
-        {{ error }}
-      </div>
+      <ErrorAlert v-bind:error="error" />
       <div class="gradebook" v-if="!error">
         <h4 class="border-bottom pb-2 mb-4">
           {{ grades.reportPeriod.name }} Grades
@@ -47,6 +45,7 @@
 
 <script>
   import Loader from "../components/Loader.vue";
+  import ErrorAlert from "../components/Error.vue";
 
   export default {
     name: "gradebook",

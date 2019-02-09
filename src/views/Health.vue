@@ -1,6 +1,7 @@
 <template>
   <div class="page-health">
     <div class="page-health-content" v-if="!contentLoading">
+      <ErrorAlert v-bind:error="error" />
       <div class="health-section" v-if="health.healthConditions.length > 0">
         <h4 class="health-section-head">
           Health Conditions
@@ -69,11 +70,13 @@
 
 <script>
   import Loader from "../components/Loader.vue";
+  import ErrorAlert from "../components/Error.vue";
 
   export default {
     name: "health",
     components: {
-      Loader
+      Loader,
+      ErrorAlert
     },
     created() {
       this.fetch();
@@ -94,6 +97,9 @@
       },
       contentLoading() {
         return this.$store.getters["page/contentLoading"];
+      },
+      error() {
+        return this.$store.getters["page/error"];
       }
     }
   }
