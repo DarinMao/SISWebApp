@@ -32,11 +32,15 @@
       checkLoggedIn() {
         if (!this.loggedIn) {
           this.$router.replace({ path: "/login", query: {next: this.$route.path}});
+          return false;
         }
+        return true;
       },
       async fetch() {
         this.$store.commit("page/setPageLoading", true);
-        this.checkLoggedIn();
+        if (!this.checkLoggedIn()) {
+          return;
+        }
         await this.$store.dispatch("data/getActiveModules");
         await this.$store.dispatch("data/getStudent");
         await this.$store.dispatch("data/getDistrictEvents");

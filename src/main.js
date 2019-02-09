@@ -6,7 +6,7 @@ import store from "./store";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faBell, faUser, faCalendarAlt, faClipboardCheck, faList, faBook, faMedkit, faCheck, faTimes, faCaretRight } from '@fortawesome/free-solid-svg-icons'
+import { faBell, faUser, faCalendarAlt, faClipboardCheck, faList, faBook, faMedkit, faCheck, faTimes, faCaretRight, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon, FontAwesomeLayers } from "@fortawesome/vue-fontawesome";
 
 
@@ -23,6 +23,7 @@ library.add(faMedkit);
 library.add(faCheck);
 library.add(faTimes);
 library.add(faCaretRight);
+library.add(faExclamationTriangle);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component("font-awesome-layers", FontAwesomeLayers);

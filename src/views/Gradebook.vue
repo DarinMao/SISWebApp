@@ -50,7 +50,8 @@
   export default {
     name: "gradebook",
     components: {
-      Loader
+      Loader,
+      ErrorAlert
     },
     created() {
       this.fetch();
