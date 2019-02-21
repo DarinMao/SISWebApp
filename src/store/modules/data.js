@@ -1,7 +1,6 @@
 function initialState() {
   return {
-    activeModules: {},
-    districtEvents: {},
+    childList: {},
     student: {},
     schedule: {},
     termList: [],
@@ -15,11 +14,8 @@ function initialState() {
 const state = initialState();
 
 const getters = {
-  activeModules: state => {
-    return state.activeModules;
-  },
-  districtEvents: state => {
-    return state.districtEvents;
+  childList: state => {
+    return state.childList;
   },
   student: state => {
     return state.student;
@@ -51,19 +47,10 @@ const actions = {
     commit("setSchedule", {});
     commit("setTermList", []);
   },
-  getActiveModules({rootState, commit}) {
-    return rootState.user.svue.getActiveModules()
-      .then(activeModules => {
-        commit("setActiveModules", activeModules);
-      })
-      .catch(e => {
-        commit("page/setError", e.message, { root: true });
-      });
-  },
-  getDistrictEvents({rootState, commit}) {
-    return rootState.user.svue.getDistrictEvents()
-      .then(districtEvents => {
-        commit("setDistrictEvents", districtEvents);
+  getChildList({rootState, commit}) {
+    return rootState.user.svue.getChildList()
+      .then(childList => {
+        commit("setChildList", childList);
       })
       .catch(e => {
         commit("page/setError", e.message, { root: true });
@@ -97,9 +84,9 @@ const actions = {
       });
   },
   getHealth({state, rootState, commit}) {
-    const healthVisits = state.activeModules.healthVisits;
-    const healthConditions = state.activeModules.healthConditions;
-    const healthImmunizations = state.activeModules.healthImmunizations;
+    const healthVisits = state.childList.activeModules.healthVisits;
+    const healthConditions = state.childList.activeModules.healthConditions;
+    const healthImmunizations = state.childList.activeModules.healthImmunizations;
     return rootState.user.svue.getHealthInfo({healthVisits, healthConditions, healthImmunizations})
       .then(health => {
         commit("setHealth", health);
@@ -144,11 +131,8 @@ const mutations = {
       state[key] = s[key]
     })
   },
-  setActiveModules(state, activeModules) {
-    state.activeModules = activeModules;
-  },
-  setDistrictEvents(state, districtEvents) {
-    state.districtEvents = districtEvents;
+  setChildList(state, childList) {
+    state.childList = childList;
   },
   setStudent(state, student) {
     state.student = student;

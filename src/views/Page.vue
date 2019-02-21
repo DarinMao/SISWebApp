@@ -41,9 +41,7 @@
         if (!this.checkLoggedIn()) {
           return;
         }
-        await this.$store.dispatch("data/getActiveModules");
-        await this.$store.dispatch("data/getStudent");
-        await this.$store.dispatch("data/getDistrictEvents");
+        await this.$store.dispatch("data/getChildList");
         this.$store.commit("page/setPageLoading", false);
       }
     },

@@ -4,10 +4,10 @@
       <li class="nav-item nav-profile">
         <div class="nav-link">
           <div class="user-wrapper">
-            <img v-bind:src="'data:image/png;base64,' + student.photo" class="profile-image" alt="Profile Image">
+            <img v-bind:src="'data:image/png;base64,' + childList.user.photo" class="profile-image" alt="Profile Image">
             <div class="text-wrapper">
-              <p class="profile-name">{{ student.name }}</p>
-              <small class="profile-id text-muted">{{ student.id }}</small>
+              <p class="profile-name">{{ childList.user.name }}</p>
+              <small class="profile-id text-muted">{{ childList.user.id }}</small>
             </div>
           </div>
           <button class="btn btn-primary btn-block" v-on:click="logout">Sign out</button>
@@ -19,31 +19,31 @@
           <span class="nav-text">Profile</span>
         </router-link>
       </li>
-      <li class="nav-item" v-if="activeModules.calendar">
+      <li class="nav-item" v-if="childList.activeModules.calendar">
         <router-link class="nav-link" active-class="active" to="/calendar">
           <font-awesome-icon icon="calendar-alt" />
           <span class="nav-text">Calendar</span>
         </router-link>
       </li>
-      <li class="nav-item" v-if="activeModules.attendance">
+      <li class="nav-item" v-if="childList.activeModules.attendance">
         <router-link class="nav-link" active-class="active" to="/attendance">
           <font-awesome-icon icon="clipboard-check" />
           <span class="nav-text">Attendance</span>
         </router-link>
       </li>
-      <li class="nav-item" v-if="activeModules.schedule">
+      <li class="nav-item" v-if="childList.activeModules.schedule">
         <router-link class="nav-link" active-class="active" to="/schedule">
           <font-awesome-icon icon="list" />
           <span class="nav-text">Schedule</span>
         </router-link>
       </li>
-      <li class="nav-item" v-if="activeModules.gradebook">
+      <li class="nav-item" v-if="childList.activeModules.gradebook">
         <router-link class="nav-link" active-class="active" to="/gradebook">
           <font-awesome-icon icon="book" />
           <span class="nav-text">Gradebook</span>
         </router-link>
       </li>
-      <li class="nav-item" v-if="activeModules.healthInfo">
+      <li class="nav-item" v-if="childList.activeModules.healthInfo">
         <router-link class="nav-link" active-class="active" to="/health">
           <font-awesome-icon icon="medkit" />
           <span class="nav-text">Health</span>
@@ -60,11 +60,8 @@
       offCanvasOpen() {
         return this.$store.getters["page/offCanvas"];
       },
-      activeModules() {
-        return this.$store.getters["data/activeModules"];
-      },
-      student() {
-        return this.$store.getters["data/student"];
+      childList() {
+        return this.$store.getters["data/childList"];
       }
     },
     methods: {

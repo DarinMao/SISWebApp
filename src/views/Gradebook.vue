@@ -1,9 +1,9 @@
 <template>
   <div class="page-gradebook">
-    <div class="page-schedule-content" v-if="!contentLoading">
+    <div class="page-gradebook-content" v-if="!contentLoading">
       <ul class="nav nav-tabs d-none d-lg-flex" role="navigation">
         <li class="nav-item" v-bind:key="reportPeriod.index" v-for="reportPeriod in grades.reportPeriods">
-          <router-link class="nav-link" v-bind:class="{active: reportPeriod.name == grades.reportPeriod.name}" v-bind:to="'/gradebook/' + reportPeriod.index">{{ reportPeriod.name }}</router-link>
+          <router-link class="nav-link" v-bind:class="{active: reportPeriod.name == grades.reportPeriod.name}" v-bind:to="{name: 'gradebook', params: {period: reportPeriod.index}}">{{ reportPeriod.name }}</router-link>
         </li>
       </ul>
       <div class="dropdown d-lg-none">
@@ -11,31 +11,36 @@
           Select report period
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <router-link class="dropdown-item" v-bind:key="reportPeriod.index" v-for="reportPeriod in grades.reportPeriods" v-bind:class="{active: reportPeriod.name == grades.reportPeriod.name}" v-bind:to="'/gradebook/' + reportPeriod.index">{{ reportPeriod.name }}</router-link>
+          <router-link class="dropdown-item" v-bind:key="reportPeriod.index" v-for="reportPeriod in grades.reportPeriods" v-bind:class="{active: reportPeriod.name == grades.reportPeriod.name}" v-bind:to="{name: 'gradebook', params: {period: reportPeriod.index}}">{{ reportPeriod.name }}</router-link>
         </div>
       </div>
       <ErrorAlert v-bind:error="error" />
       <div class="gradebook" v-if="!error">
-        <h4 class="border-bottom pb-2 mb-4">
-          {{ grades.reportPeriod.name }} Grades
-        </h4>
-        <div class="gradebook-class" v-for="(course, index) in grades.courses">
-          <div class="class-header">
-            <h5>
-              {{ course.period }}: {{ course.name }}
-            </h5>
-            <div class="class-details">
+        <div class="card" v-bind:key="course.period" v-for="(course, courseIndex) in grades.courses">
+          <router-link v-bind:to="{name: 'gradebookMark', params: {period: grades.reportPeriod.index, course: courseIndex}}" append>
+            <h4 class="card-header">
+              {{ course.period }}. {{ course.name }}
+            </h4>
+          </router-link>
+          <div class="card-body">
+            <h5 class="card-title">
               <a v-bind:href="'mailto:' + course.teacher.email">{{ course.teacher.name }}</a>
-              Room: {{ course.room }}
-            </div>
+            </h5>
+            <h6 class="card-subtitle">
+              Room {{ course.room }}
+            </h6>
+            <table class="table">
+              <col span="1" class="col-markname">
+              <tr v-bind:key="mark.name" v-for="(mark, markIndex) in course.marks">
+                <th scope="row">{{ mark.name }}</th>
+                <td>
+                  <router-link v-bind:to="{name: 'gradebookMark', params: {course: courseIndex, mark: markIndex}}" append>
+                    {{ mark.calculatedScore }} ({{ mark.rawCalculatedScore.toFixed(1) }})
+                  </router-link>
+                </td>
+              </tr>
+            </table>
           </div>
-          <table class="table">
-            <col span="1" class="col-markname">
-            <tr v-for="mark in course.marks">
-              <th scope="row">{{ mark.name }}</th>
-              <td>{{ mark.calculatedScore }} ({{ mark.rawCalculatedScore.toFixed(1) }})</td>
-            </tr>
-          </table>
         </div>
       </div>
     </div>
@@ -85,36 +90,34 @@
     margin-bottom: 2rem;
   }
 
-  .nav-tabs .nav-link:not(.active), .dropdown-menu .dropdown-item:not(.active) {
-    cursor: pointer;
-  }
-
   .table {
     table-layout: fixed;
+    margin-top: 0.5rem;
   }
 
   .col-markname {
     width: 40%;
   }
 
-  .class-header {
+  .gradebook {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
   }
 
-  .class-header .class-details {
-    display: flex;
-    flex-direction: column;
+  .card {
+    margin-bottom: 1rem;
+    flex-basis: 100%;
+  }
+
+  .card > a, .card > a:hover {
+    color: inherit;
   }
 
   @media (min-width: 992px) {
-    .class-header {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-
-    .class-header .class-details {
-      text-align: right;
+    .card {
+      margin-right: 1rem;
+      flex-basis: calc(25% - 1rem);
+      min-width: 400px;
     }
   }
 </style>

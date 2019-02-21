@@ -7,6 +7,7 @@ import Calendar from "./views/Calendar.vue";
 import Attendance from "./views/Attendance.vue";
 import Schedule from "./views/Schedule.vue";
 import Gradebook from "./views/Gradebook.vue";
+import GradebookMark from "./views/GradebookMark.vue";
 import Health from "./views/Health.vue";
 import NotFound from "./components/NotFound.vue";
 
@@ -23,26 +24,37 @@ export default new Router({
       children: [
         {
           path: "profile",
+          name: "profile",
           component: Profile
         },
         {
           path: "calendar",
+          name: "calendar",
           component: Calendar
         },
         {
+          path: "attendance",
           path: "attendance",
           component: Attendance
         },
         {
           path: "schedule/:term?",
+          name: "schedule",
           component: Schedule
         },
         {
-          path: "gradebook/:period?",
+          path: "gradebook/:period(\\d)?",
+          name: "gradebook",
           component: Gradebook
         },
         {
+          path: "gradebook/:period(\\d)?/course/:course(\\d)/:mark(\\d)?",
+          name: "gradebookMark",
+          component: GradebookMark
+        },
+        {
           path: "health",
+          name: "health",
           component: Health
         }
       ]
@@ -55,7 +67,7 @@ export default new Router({
     },
     {
       path: "*",
-      name: "notfound",
+      name: "notFound",
       components: {
         error: NotFound
       }

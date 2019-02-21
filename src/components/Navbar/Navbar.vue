@@ -11,17 +11,23 @@
           <a class="nav-link dropdown-toggle" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <font-awesome-layers class="fa-lg">
               <font-awesome-icon icon="bell" />
-              <span class="fa-layers-counter fa-lg" v-if="districtEvents.length > 0">{{ districtEvents.length }}</span>
+              <span class="fa-layers-counter fa-lg" v-if="childList.districtEvents.length > 0">{{ childList.districtEvents.length }}</span>
             </font-awesome-layers>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
             <h4 class="dropdown-header">Alerts</h4>
-            <a class="dropdown-item" v-for="districtEvent in districtEvents">{{ districtEvent.title }}</a>
+            <div class="dropdown-item" v-if="childList.districtEvents.length == 0">
+              No alerts
+            </div>
+            <a class="dropdown-item" v-for="districtEvent in childList.districtEvents">
+              <h5>{{ districtEvent.title }}</h5>
+              {{ districtEvent.date.toLocaleDateString() }}
+            </a>
           </div>
         </li>
         <li class="nav-item user-profile d-none d-lg-flex">
-          <span class="profile-name">{{ student.name }}</span>
-          <img v-bind:src="'data:image/png;base64,' + student.photo" class="profile-image" alt="Profile Image">
+          <span class="profile-name">{{ childList.user.name }}</span>
+          <img v-bind:src="'data:image/png;base64,' + childList.user.photo" class="profile-image" alt="Profile Image">
         </li>
       </ul>
     </div>
@@ -41,8 +47,8 @@
       }
     },
     computed: {
-      student() {
-        return this.$store.getters["data/student"];
+      childList() {
+        return this.$store.getters["data/childList"];
       },
       districtEvents() {
         return this.$store.getters["data/districtEvents"];

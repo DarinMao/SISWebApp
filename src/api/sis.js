@@ -67,45 +67,34 @@ StudentVUE.prototype.authenticate = async function() {
   return this.request("GetPXPMessages");
 }
 
-StudentVUE.prototype.getDistrictName = async function() {
+StudentVUE.prototype.getChildList = async function() {
   const data = await this.request("ChildList");
   const js = data.ChildList;
 
-  return js._attributes.DistrictName;
-}
+  const attributes = js._attributes;
+  const districtName = attributes.DistrictName;
 
-StudentVUE.prototype.getActiveModules = async function() {
-  const data = await this.request("ChildList");
-  const js = data.ChildList;
-
-  const activeModules = js._attributes;
-  const gradebook = activeModules.ShowGradeBookModule == "true";
-  const attendance = activeModules.ShowAttendanceModule == "true";
-  const schedule = activeModules.ShowCurrentScheduleModule == "true";
-  const discipline = activeModules.ShowDisciplineModule == "true";
-  const calendar = activeModules.ShowCalenderModule == "true";
-  const conference = activeModules.ShowConferenceModule == "true";
-  const courseHistory = activeModules.ShowCourseHistoryModule == "true";
-  const courseRequest = activeModules.ShowCourseRequestModule == "true";
-  const fees = activeModules.ShowFeeModule == "true";
-  const healthVisits = activeModules.ShowHealthVisitModule == "true";
-  const healthConditions = activeModules.ShowHealthConditionsModule == "true";
-  const healthImmunizations = activeModules.ShowHealthImmunizationModule == "true";
+  const gradebook = attributes.ShowGradeBookModule == "true";
+  const attendance = attributes.ShowAttendanceModule == "true";
+  const schedule = attributes.ShowCurrentScheduleModule == "true";
+  const discipline = attributes.ShowDisciplineModule == "true";
+  const calendar = attributes.ShowCalenderModule == "true";
+  const conference = attributes.ShowConferenceModule == "true";
+  const courseHistory = attributes.ShowCourseHistoryModule == "true";
+  const courseRequest = attributes.ShowCourseRequestModule == "true";
+  const fees = attributes.ShowFeeModule == "true";
+  const healthVisits = attributes.ShowHealthVisitModule == "true";
+  const healthConditions = attributes.ShowHealthConditionsModule == "true";
+  const healthImmunizations = attributes.ShowHealthImmunizationModule == "true";
   const healthInfo = healthVisits || healthConditions || healthImmunizations;
-  const reportCard = activeModules.ShowReportCardModule == "true";
-  const schoolInfo = activeModules.ShowSchoolInformationModule == "true";
-  const streams = activeModules.ShowStreamsModule == "true";
-  const classWebsite = activeModules.ShowClassWebSiteModule == "true";
-  const namePronunciation = activeModules.ShowNamePronunciationModule == "true";
-  const synergyMail = activeModules.ShowSynergyMailModule == "true";
-  const documentModule = activeModules.ShowDocumentModule == "true";
-
-  return {gradebook, attendance, schedule, discipline, calendar, conference, courseHistory, courseRequest, fees, healthInfo, healthVisits, healthConditions, healthImmunizations, reportCard, schoolInfo, streams, classWebsite, namePronunciation, synergyMail, documentModule};
-}
-
-StudentVUE.prototype.getDistrictEvents = async function() {
-  const data = await this.request("ChildList");
-  const js = data.ChildList;
+  const reportCard = attributes.ShowReportCardModule == "true";
+  const schoolInfo = attributes.ShowSchoolInformationModule == "true";
+  const streams = attributes.ShowStreamsModule == "true";
+  const classWebsite = attributes.ShowClassWebSiteModule == "true";
+  const namePronunciation = attributes.ShowNamePronunciationModule == "true";
+  const synergyMail = attributes.ShowSynergyMailModule == "true";
+  const documentModule = attributes.ShowDocumentModule == "true";
+  const activeModules = {gradebook, attendance, schedule, discipline, calendar, conference, courseHistory, courseRequest, fees, healthVisits, healthConditions, healthImmunizations, healthInfo, reportCard, schoolInfo, streams, classWebsite, namePronunciation, synergyMail, documentModule}
 
   const districtEvents = [];
   const districtEventListAttributes = js.DistrictEventRecordList.DistrictEventRecord;
@@ -120,7 +109,15 @@ StudentVUE.prototype.getDistrictEvents = async function() {
     }
   }
 
-  return districtEvents;
+  const childAttributes = js.Child;
+  const name = childAttributes._attributes.ChildFirstName;
+  const id = this._username;
+  const school = childAttributes.OrganizationName._text;
+  const grade = parseInt(childAttributes.Grade._text);
+  const photo = childAttributes.photo._text;
+  const user = {name, id, school, grade, photo};
+
+  return {districtName, activeModules, districtEvents, user};
 }
 
 StudentVUE.prototype.getStudent = async function() {
@@ -224,7 +221,10 @@ StudentVUE.prototype.getTermList = async function() {
 
 StudentVUE.prototype.getClassSchedule = async function(term) {
   const params = {};
-  if (term != undefined) {
+  if (typeof term !== "undefined") {
+    if (isNaN(term)) {
+      throw new Error("Invalid term index");
+    }
     params.TermIndex = term;
   }
   const data = await this.request("StudentClassList", params);
@@ -260,20 +260,12 @@ StudentVUE.prototype.getClassSchedule = async function(term) {
   return {termIndex, termName, classList};
 }
 
-/* Gradebook is still closed :(
-StudentVUE.prototype.getGrades = async function(term=null) {
-  const params = {ChildIntID: 0};
-  if (term != null) {
-    params.ReportPeriod = term;
-  }
-  const data = await this.request("Gradebook", params);
-  const js = data.StudentClassSchedule;
-}
-*/
-
-StudentVUE.prototype.getGrades = async function(term=null) {
+StudentVUE.prototype.getGrades = async function(term) {
   const params = {};
-  if (term != null) {
+  if (typeof term !== "undefined") {
+    if (isNaN(term)) {
+      throw new Error("Invalid term index");
+    }
     params.ReportPeriod = term;
   }
   const data = await this.request("Gradebook", params);
@@ -293,10 +285,11 @@ StudentVUE.prototype.getGrades = async function(term=null) {
   }
 
   const reportPeriodAttributes = js.ReportingPeriod._attributes;
+  const index = (typeof term !== "undefined") ? parseInt(term) : undefined;
   const name = reportPeriodAttributes.GradePeriod;
   const beginDate = new Date(reportPeriodAttributes.StartDate);
   const endDate = new Date(reportPeriodAttributes.EndDate);
-  const reportPeriod = {name, beginDate, endDate};
+  const reportPeriod = {index, name, beginDate, endDate};
 
   const courses = [];
   const courseListAttributes = js.Courses.Course;
@@ -541,5 +534,5 @@ StudentVUE.prototype.getAttendance = async function() {
     }
   }
 
-  return {absences, excused, tardies, unexcused, activities, unexcusedTardies};
+  return {type, start, end, periods, absences, excused, tardies, unexcused, activities, unexcusedTardies};
 }
