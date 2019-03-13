@@ -1,7 +1,7 @@
 <template>
   <div class="page-calendar">
     <div class="page-calendar-content" v-if="!contentLoading">
-      <h4 class="border-bottom pb-2 mb-4">
+      <h4>
         Calendar
       </h4>
       <p>
