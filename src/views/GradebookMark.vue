@@ -1,7 +1,8 @@
 <template>
   <div class="page-gradebookmark">
     <div class="page-gradebookmark-content" v-if="!contentLoading">
-      <h4 class="border-bottom pb-2 mb-4">
+      <router-link class="btn btn-lg btn-light back-btn" v-bind:to="{name: 'gradebook', params: {period: grades.reportPeriod.index}}"><font-awesome-icon icon="angle-left" class="back-icon" />Back to gradebook</router-link>
+      <h4>
         {{ grades.reportPeriod.name }} Grades - {{ grades.courses[course].name }}
       </h4>
       <ul class="nav nav-tabs d-none d-lg-flex" role="navigation">
@@ -19,13 +20,16 @@
       </div>
       <ErrorAlert v-bind:error="error" />
       <div class="mark-summary">
-        <h5 class="mark-summary-head">
+        <h4 class="mark-summary-head">
           Grade Summary
-        </h5>
+        </h4>
+        <p v-if="mark.gradeSummary.length == 0">
+          No grade calculations posted.
+        </p>
         <div class="calculation" v-bind:key="calculation.type" v-for="calculation in mark.gradeSummary">
-          <h6>
+          <h5>
             {{ calculation.type }}
-          </h6>
+          </h5>
           <table class="table">
             <col span="1" class="col-weight">
             <col span="1" class="col-points">
@@ -44,6 +48,35 @@
         </div>
       </div>
       <div class="assignments">
+        <h4 class="assignments-head">
+          Assignments
+        </h4>
+        <p v-if="Object.keys(mark.assignments).length == 0">
+          No grades posted.
+        </p>
+        <div class="assignment" v-bind:key="assignmentIndex" v-for="(assignment, assignmentIndex) in mark.assignments">
+          <h5>
+            {{ assignment.name }}
+          </h5>
+          <h6>
+            {{ assignment.type }}
+          </h6>
+          <table class="table">
+            <col span="1" class="col-date">
+            <col span="1" class="col-points">
+            <col span="1" class="col-weighted">
+            <tr>
+              <th scope="column">Date</th>
+              <th scope="column">Points</th>
+              <th scope="column">Score</th>
+            </tr>
+            <tr>
+              <td>{{ assignment.date.toLocaleDateString() }}</td>
+              <td>{{ assignment.points }}</td>
+              <td>{{ assignment.score }}<br>{{ assignment.scoreType }}</td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
     <Loader class="content-loader" v-if="contentLoading" />
@@ -113,7 +146,25 @@
     table-layout: fixed;
   }
 
+  .mark-summary {
+    margin-bottom: 1rem;
+  }
+
+  .calculation, .assignment {
+    background-color: white;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
   .col-weight, .col-points, .col-weighted {
     width: 33.333333%;
+  }
+
+  .back-btn {
+    margin-bottom: 1rem;
+  }
+
+  .back-btn > .back-icon {
+    margin-right: 0.5rem;
   }
 </style>

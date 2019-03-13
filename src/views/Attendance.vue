@@ -1,7 +1,7 @@
 <template>
   <div class="page-attendance">
-    <div class="page-attendance-content">
-      <h4 class="border-bottom pb-2 mb-4">
+    <div class="page-attendance-content" v-if="!contentLoading">
+      <h4>
         Attendance
       </h4>
       <p>
@@ -22,8 +22,7 @@
   export default {
     name: "attendance",
     components: {
-      Loader,
-      ErrorAlert
+      Loader
     },
     created() {
       this.fetch();
