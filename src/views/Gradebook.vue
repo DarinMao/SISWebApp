@@ -19,6 +19,7 @@
         <h4>
           {{ grades.reportPeriod.name }} Grades
         </h4>
+        <a v-bind:href="'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(grades, undefined, 3))" v-bind:download="grades.reportPeriod.name + '.json'">Export</a>
         <div class="gradebook-class" v-for="(course, courseIndex) in grades.courses">
           <div class="class-header">
             <h5>
