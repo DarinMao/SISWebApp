@@ -104,8 +104,8 @@ const actions = {
         commit("page/setError", e.message, { root: true });
       });
   },
-  getCalendar({rootState, commit}) {
-    return rootState.user.svue.getCalendar()
+  getCalendar({rootState, commit}, date) {
+    return rootState.user.svue.getCalendar(date)
       .then(calendar => {
         commit("setCalendar", calendar);
       })

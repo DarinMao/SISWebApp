@@ -49,8 +49,12 @@ StudentVUE.prototype.request = async function(method, params={}) {
   });
   const js = parse.xml2js(response.data.d, parseOpts);
 
+  const attributes = js[Object.keys(js)[0]]._attributes;
   if (js.hasOwnProperty("RT_ERROR")) {
-    throw new Error(js.RT_ERROR._attributes.ERROR_MESSAGE);
+    throw new Error(attributes.ERROR_MESSAGE);
+  }
+  if (attributes.hasOwnProperty("ErrorMessage")) {
+    throw new Error(attributes.ErrorMessage);
   }
 
   return js;
