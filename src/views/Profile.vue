@@ -175,7 +175,7 @@
   }
 
   col {
-    width: 40%;
+    width: 30%;
   }
 
   .profile-section {

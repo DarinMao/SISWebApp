@@ -20,14 +20,12 @@
           {{ schedule.termName }} Schedule
         </h4>
         <div class="schedule-class" v-bind:key="course.period" v-for="course in schedule.classList">
-          <div class="class-header">
-            <h5>
-              {{ course.period }}: {{ course.name }}
-            </h5>
-            <div class="class-details">
-              <a v-bind:href="'mailto:' + course.teacher.email">{{ course.teacher.name }}</a>
-              Room: {{ course.room }}
-            </div>
+          <h5 class="class-header">
+            {{ course.period }}: {{ course.name }}
+          </h5>
+          <div class="class-details">
+            <a v-bind:href="'mailto:' + course.teacher.email">{{ course.teacher.name }}</a>
+            Room: {{ course.room }}
           </div>
         </div>
       </div>
@@ -81,7 +79,7 @@
 
 <style scoped>
   .nav-tabs, .dropdown {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 
   .nav-tabs .nav-link:not(.active), .dropdown-menu .dropdown-item:not(.active) {
@@ -90,8 +88,8 @@
 
   .schedule-class {
     background-color: white;
-    padding: 1rem;
-    margin-top: 1rem;
+    padding: 0.5rem;
+    margin-top: 2px;
   }
 
   .class-header {
@@ -99,19 +97,26 @@
     flex-direction: column;
   }
 
-  .class-header .class-details {
+  .class-details {
     display: flex;
     flex-direction: column;
+    font-size: 0.7rem;
   }
 
   @media (min-width: 992px) {
+    .schedule-class {
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
     .class-header {
       flex-direction: row;
       justify-content: space-between;
     }
 
-    .class-header .class-details {
+    .class-details {
       text-align: right;
+      font-size: inherit;
     }
   }
 </style>

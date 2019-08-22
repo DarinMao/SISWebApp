@@ -89,7 +89,7 @@
 
 <style scoped>
   .nav-tabs, .dropdown {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 
   .nav-tabs .nav-link:not(.active), .dropdown-menu .dropdown-item:not(.active) {
@@ -102,8 +102,8 @@
 
   .gradebook-class {
     background-color: white;
-    padding: 1rem;
-    margin-top: 1rem;
+    padding: 0.5rem;
+    margin-top: 2px;
   }
 
   .col-markname {
@@ -118,9 +118,15 @@
   .class-header .class-details {
     display: flex;
     flex-direction: column;
+    font-size: 0.25rem;
   }
 
   @media (min-width: 992px) {
+    .gradebook-class {
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
     .class-header {
       flex-direction: row;
       justify-content: space-between;

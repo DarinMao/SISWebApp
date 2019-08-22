@@ -4,12 +4,6 @@
       <h4>
         Attendance
       </h4>
-      <p>
-        As of now, the only thing this page can do is load your data. If you are curious, here is all the data retrieved:
-      </p>
-      <pre>
-{{ JSON.stringify(attendance, undefined, 2) }}
-      </pre>
     </div>
     <Loader class="content-loader" v-if="contentLoading" />
   </div>

@@ -25,7 +25,7 @@
           <span class="nav-text">Calendar</span>
         </router-link>
       </li>
-      <li class="nav-item" v-if="childList.activeModules.attendance">
+      <li class="nav-item" v-if="false">
         <router-link class="nav-link" active-class="active" to="/attendance">
           <font-awesome-icon icon="clipboard-check" />
           <span class="nav-text">Attendance</span>

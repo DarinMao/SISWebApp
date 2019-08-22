@@ -47,7 +47,7 @@
     position: absolute;
     top: calc(50px + 0.625rem);
     left: 0;
-    padding: 2rem;
+    padding: 1rem;
     background-color: #f2f8f9;
   }
 
@@ -55,6 +55,7 @@
     .content {
       width: calc(100% - 250px);
       left: 250px;
+      padding: 2rem;
     }
   }
 </style>

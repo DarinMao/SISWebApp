@@ -1,9 +1,6 @@
 <template>
   <div class="page-calendar">
     <div class="page-calendar-content" v-if="!contentLoading">
-      <h4>
-        Calendar
-      </h4>
       <vue-cal
           :time="false"
           :disableViews="['years']"
