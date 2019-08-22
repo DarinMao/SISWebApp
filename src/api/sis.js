@@ -53,7 +53,7 @@ StudentVUE.prototype.request = async function(method, params={}) {
   if (js.hasOwnProperty("RT_ERROR")) {
     throw new Error(attributes.ERROR_MESSAGE);
   }
-  if (attributes.hasOwnProperty("ErrorMessage")) {
+  if (attributes.hasOwnProperty("ErrorMessage") && attributes.ErrorMessage != "") {
     throw new Error(attributes.ErrorMessage);
   }
 
