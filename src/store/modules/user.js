@@ -40,6 +40,8 @@ const actions = {
   },
   logout({dispatch}) {
     dispatch("reset", null, { root: true });
+    localStorage.removeItem("username")
+    localStorage.removeItem("password")
     router.push("/login");
   }
 }
