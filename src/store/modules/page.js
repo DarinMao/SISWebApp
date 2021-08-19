@@ -4,6 +4,7 @@ function initialState() {
     contentLoading: false,
     offCanvas: false,
     enableLogin: true,
+    stayLoggedIn: false,
     error: ""
   }
 }

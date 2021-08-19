@@ -7,6 +7,9 @@
       <input type="text" id="inputEmail" class="form-control" v-bind:class="{'is-invalid': error}" placeholder="Username" required autofocus v-model="user.username" v-bind:disabled="!enableLogin">
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" id="inputPassword" class="form-control" v-bind:class="{'is-invalid': error}" v-bind:placeholder="(error)?error:'Password'" required v-model="user.password" v-bind:disabled="!enableLogin">
+      <!-- This does store passwords unencrypted in local storage, I wish sis allowed us to have
+      long-term tokens, but this is what we have instead -->
+      <input type="checkbox" class="form-control" v-model="stayLoggedIn">Remember Username/Password? (Insecure)
       <button class="btn btn-lg btn-primary btn-block" type="submit" v-bind:disabled="!enableLogin">Sign in</button>
       <Copyright />
     </form>
@@ -33,13 +36,24 @@
       return {
         user: {
           username: "",
-          password: ""
+          password: "",
+          stayLoggedIn: (localStorage.getItem("password") != null)
         }
       }
     },
     created() {
       if (this.loggedIn) {
         this.$router.replace((this.next !== undefined) ? this.next : "/profile");
+      }
+      if (localStorage.getItem("password") != null && 
+      localStorage.getItem("username") != null) {
+        this.user.username = localStorage.getItem("username")
+        this.user.password = localStorage.getItem("password")
+        this.$store.dispatch("user/login",
+         {user: this.user, next: this.next, persistLogin: this.stayLoggedIn})
+          .then(() => {
+            this.user.password = "";
+          });
       }
     },
     computed: {
@@ -54,8 +68,8 @@
       }
     },
     methods: {
-      signin() {
-        this.$store.dispatch("user/login", {user: this.user, next: this.next})
+      signin() {6
+        this.$store.dispatch("user/login", {user: this.user, next: this.next, persistLogin: this.stayLoggedIn})
           .then(() => {
             this.user.password = "";
           });
