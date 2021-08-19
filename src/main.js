@@ -9,6 +9,11 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBell, faUser, faCalendarAlt, faClipboardCheck, faList, faBook, faMedkit, faCheck, faTimes, faCaretRight, faExclamationTriangle, faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon, FontAwesomeLayers } from "@fortawesome/vue-fontawesome";
 
+import runtime from "serviceworker-webpack-plugin/lib/runtime";
+
+if ("serviceWorker" in navigator) {
+  runtime.register();
+}
 
 Vue.config.productionTip = true;
 Vue.use(Vuex);
