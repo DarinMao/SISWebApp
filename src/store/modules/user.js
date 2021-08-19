@@ -24,14 +24,24 @@ const actions = {
       .then(() => {
         commit("setLoggedIn", true);
         router.push((data.next !== undefined) ? data.next : "/profile");
+        if (data.persistLogin) {
+          // yup, this is bad, I know that, please tell me to fix it AFTER sis adds user tokens
+          // or when I feel like adding a server-side keystore
+          localStorage.setItem("username", data.user.username)
+          localStorage.setItem("password", data.user.password)
+        }
       })
       .catch(e => {
         commit("page/setError", e.message, { root: true });
         commit("page/setEnableLogin", true, { root: true });
+        localStorage.removeItem("username")
+        localStorage.removeItem("password")
       });
   },
   logout({dispatch}) {
     dispatch("reset", null, { root: true });
+    localStorage.removeItem("username")
+    localStorage.removeItem("password")
     router.push("/login");
   }
 }
