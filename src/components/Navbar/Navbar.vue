@@ -19,11 +19,18 @@
             <div class="dropdown-item" v-if="childList.districtEvents.length == 0">
               No alerts
             </div>
-            <a class="dropdown-item" v-for="districtEvent in childList.districtEvents">
+            <!-- no idea what this is
+              <a class="dropdown-item" v-for="districtEvent in childList.districtEvents">
               <h5>{{ districtEvent.title }}</h5>
               {{ districtEvent.date.toLocaleDateString() }}
             </a>
+            -->
           </div>
+        </li>
+        <li class="nav-item d-lg-flex">
+          <button class="navbar-toggler mx-3 d-flex ml-auto" v-on:click="toggleOffCanvas" type="button" data-toggle="offcanvas" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
         </li>
         <li class="nav-item user-profile d-none d-lg-flex">
           <span class="profile-name">{{ childList.user.name }}</span>
@@ -32,9 +39,6 @@
       </ul>
     </div>
 
-    <button class="navbar-toggler mx-3" v-on:click="toggleOffCanvas" type="button" data-toggle="offcanvas" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
   </nav>
 </template>
 

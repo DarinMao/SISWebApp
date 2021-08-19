@@ -21,5 +21,8 @@
   "start_url": "/",
   "background_color": "#ffffff",
   "display": "fullscreen",
-  "theme_color": "#5983e8"
+  "theme_color": "#5983e8",
+  "related_applications": [{
+    "platform": "webapp"
+  }]
 }
