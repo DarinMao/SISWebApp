@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
 
+
 import page from "./modules/page";
 import user from "./modules/user";
 import data from "./modules/data";
