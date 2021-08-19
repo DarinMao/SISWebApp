@@ -34,7 +34,7 @@ export default new Router({
         },
         {
           path: "attendance",
-          path: "attendance",
+          name: "attendance",
           component: Attendance
         },
         {
