@@ -70,7 +70,7 @@
     padding: 0;
     height: calc(50px + 0.625rem);
     background-color: #5983e8;
-    position: fixed;
+  position: fixed; 
     top: 0;
     width: 100%;
   }
@@ -89,7 +89,7 @@
 
   .navbar-nav {
     flex-direction: row;
-    alin-items: center;
+    align-items: center;
   }
 
   .nav-item {
@@ -104,10 +104,11 @@
     color: white !important;
   }
 
+/* absolute is always bad, don't use it.
   .nav-item .dropdown-menu-right {
     position: absolute;
   }
-
+*/
   .user-profile .profile-image {
     margin-left: 0.5rem;
     width: 40px;

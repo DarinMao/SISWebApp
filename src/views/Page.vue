@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="max-w-full">
     <Navbar v-if="loggedIn && !pageLoading" />
     <div class="container-fluid page-body-wrapper" v-if="loggedIn && !pageLoading">
       <Sidebar />

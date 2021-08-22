@@ -120,7 +120,7 @@
           <h4 class="profile-section-head">
             {{ groupName }}
           </h4>
-          <table class="table">
+          <table class="table" style="word-wrap: break-word;">
             <col span="1" class="headers">
             <tr v-for="(value, key) in customItemGroup">
               <th scope="row">{{ key }}</th>
